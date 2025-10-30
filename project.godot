@@ -1,0 +1,39 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Scary Minesweeper"
+run/main_scene="uid://b7c7h1nef24nj"
+config/features=PackedStringArray("4.5", "C#", "GL Compatibility")
+config/icon="uid://bbgsd3q5d2jn8"
+
+[display]
+
+window/size/viewport_width=768
+window/size/viewport_height=576
+window/size/resizable=false
+window/size/maximize_disabled=true
+window/per_pixel_transparency/allowed=true
+
+[dotnet]
+
+project/assembly_name="Minesweeper"
+
+[gui]
+
+theme/custom="uid://ckat2fiv45jjn"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)
