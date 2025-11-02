@@ -29,9 +29,9 @@ public partial class Minesweeper : TileMapLayer
     [Signal]
     public delegate void OnWinEventHandler();
     [Signal]
-    public delegate void OnLoseEventHandler();
+    public delegate void OnLoseEventHandler(Vector2I mineCell);
     [Signal]
-    public delegate void OnPostWinEventHandler();
+    public delegate void OnPostWinEventHandler(Vector2I mineCell);
 
     [Export]
     public int NumMines { get; set; } = 60;
@@ -100,7 +100,7 @@ public partial class Minesweeper : TileMapLayer
         {
             _apparitionTimer = ApparitionMoveTime;
             if (GetPlayerDistFromApparition() <= 1)
-                Lose();
+                Lose(_apparitionCell);
             else
                 ApparitionCell = new Vector2I(GD.RandRange(0, SizeX - 1), GD.RandRange(0, SizeY - 1));
         }
@@ -136,7 +136,8 @@ public partial class Minesweeper : TileMapLayer
         _apparitionCell = Vector2I.MinValue;
         _apparitionTimer = ApparitionMoveTime;
         PlayerSprite.Visible = false;
-
+        _ignoreInput = false;
+        SetPhysicsProcess(true);
         for (int x = 0; x < SizeX; x++)
         {
             for (int y = 0; y < SizeY; y++)
@@ -241,14 +242,16 @@ public partial class Minesweeper : TileMapLayer
 
         if (_hasWon)
         {
-            EmitSignal(SignalName.OnPostWin);
+            SetTile(cell, Tile.None);
+            EmitSignal(SignalName.OnPostWin, cell);
             _ignoreInput = true;
             return;
         }
 
         if (IsMineAt(cell))
         {
-            Lose();
+            SetTile(cell, Tile.None);
+            Lose(cell);
             return;
         }
 
@@ -358,10 +361,11 @@ public partial class Minesweeper : TileMapLayer
         VictorySoundPlayer.Play();
     }
 
-    private void Lose()
+    private void Lose(Vector2I mineCell)
     {
-        EmitSignal(SignalName.OnLose);
-        Reset();
+        EmitSignal(SignalName.OnLose, mineCell);
+        _ignoreInput = true;
+        SetPhysicsProcess(false);
     }
 
     public int GetPlayerDistFromApparition()

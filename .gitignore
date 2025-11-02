@@ -3,3 +3,5 @@
 /android/
 
 .vs/
+Properties/
+*.user
