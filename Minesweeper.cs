@@ -304,6 +304,9 @@ public partial class Minesweeper : TileMapLayer
         {
             Win();
         }
+
+        // If blocks are removed that were on top of the apparition, then the tiles must be updated
+        RefreshApparitionTile(_apparitionCell);
     }
 
     public void ToggleFlag(Vector2I cell)
